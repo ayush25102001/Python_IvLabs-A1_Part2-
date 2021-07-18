@@ -1,0 +1,56 @@
+import numpy as np              #importing the library for getting matrix to represent the board.
+def create_board():             #creating the board
+    board = np.zeros((7, 7))    #setting the dimensions to the board
+    return board
+def droppiece(board,row,col,piece):  #filling the position wuth the piece
+    board[row][col]=piece
+def validation(board,col):    #piece can only be dropped in a col if the position in that col corresponding to its
+    return board[6][col]==0        #topmost row is yet unfilled if it is filled no selections can be made in current col
+def nextopenrow(board,col):
+    for r in range(0,6):
+        if board[r][col]==0:   #checking if the row is open thus a piece can be dropped there
+            return r
+def printboard(board):
+    print(np.flip(board,0))    #flips the board about the x axis so as to dissolve the default numpy indexing
+def win(board,piece):          #1:check all the horizontal locations
+    for c in range(4):         # we cannot have 4 winning pieces horizontally after reaching col 4
+        for r in range(7):
+            if board[r][c]==piece and board[r][c+1]==piece and board[r][c+2]==piece and board[r][c+3]==piece:
+                return True    #2:now checking for a vertical win on the board
+    for c in range(7):         # we cannot have 4 winning pieces horizontally after reaching row 4
+        for r in range(4):
+            if board[r][c]==piece and board[r+1][c]==piece and board[r+2][c]==piece and board[r+3][c]==piece:
+                return True
+    for c in range(4):         #3:now checking for positively sloped diagonals(we start from bottom)
+        for r in range(4):
+            if board[r][c]==piece and board[r+1][c+1]==piece and board[r+2][c+2]==piece and board[r+3][c+3]==piece:
+                return True
+    for c in range(4):         #4:now checking for negatively sloped diagonals(we start from top)
+        for r in range(3,7):
+            if board[r][c]==piece and board[r-1][c+1]==piece and board[r-2][c+2]==piece and board[r-3][c+3]==piece:
+                return True
+board=create_board()
+printboard(board)
+gameover=False
+turn=0
+while not gameover:             #loop which would run untill the game does not end
+    if turn==0:
+        col=int(input("PLAYER 1:DROPPIECE_1!:"))
+        if validation(board,col):
+            row=nextopenrow(board,col)
+            droppiece(board,row,col,1)
+            if win(board,1):
+                print("*****PLAYER 1 WINS*****")
+                gameover=True
+    else:
+        col=int(input("PLAYER 2:DROPPIECE_2!:"))
+        if  validation(board,col):
+            row=nextopenrow(board,col)
+            droppiece(board,row,col,2)
+            if win(board,2):
+                print("*****PLAYER 2 WINS*****")
+                gameover = True
+    printboard(board)
+    turn=turn+1                 #incrementing turn when any player makes a choice
+    turn=turn%2                 #if turn is 0, 1 makes a choice and 2 chooses if turn=1 thus using modulus
+

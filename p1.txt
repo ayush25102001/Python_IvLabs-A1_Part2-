@@ -1,0 +1,76 @@
+import math
+ss1=input("Enter first name:")
+s2=input("Enter second name:")
+s1=ss1.lower()
+s2=s2.lower()
+s=ss1+"bonds"+s2             #concatenating
+d=dict()                     #using a dictionary to store the count of indivisual alphabets int the concatenated string
+for x in s:
+    if x in d:
+        d[x]=d[x]+1
+    else:
+        d[x]=1
+lis=[]
+l=0
+for x in d:                #creating the initial list consiting the frequency of alphabets
+    lis.append(d[x])
+    l=l+1
+while(l>3):
+    li=[]
+    k=0
+    if(l%2!=0):                              #computing the sum of 2 end elemnts of the list and storing in another list
+        for i in range(0,math.floor(l/2)):
+            sum=lis[i]+lis[l-i-1]
+            if(sum<10):
+                li.append(sum)
+            else:
+                rem=sum%10                 #if sum is greater than 10 or equal to 10 storing it as 2 list items
+                rev=sum/10
+                li.append(rev)
+                li.append(rem)
+            k=i
+        li.append(lis[k+1])
+        l=len(li)
+        lis.clear()                          #replacing the initial list with the currently computed list
+        lis=li
+    else:
+        for i in range(0,math.floor(l/2)):
+            sum=lis[i]+lis[l-i-1]
+            if(sum<10):
+                li.append(sum)
+            else:
+                rem=sum%10
+                rev=sum/10
+                li.append(rev)
+                li.append(rem)
+        l = len(li)
+        lis.clear()
+        lis = li
+c=len(lis)
+s1=0
+cnt=lis[0]*100+lis[1]*10+lis[2]          #computing the list of length 3 according to the magnitude 
+while((cnt>100)and(c==3)):
+        h=[]
+        s1=lis[0]+lis[2]
+        if(s1<10):
+            h.append(s1)
+            h.append(lis[1])
+            cnt=h[0]*10+h[1]            #if the obtained list is of size 2 then thats it
+            c=c-1
+        else:
+            remm=s1%10
+            revv=s1/10
+            h.append(revv)               #if the end sums are greater than 10 then again maintaing a new list of 3 items
+            h.append(remm)
+            h.append(lis[1])
+            cnt=h[0]*100+h[1]*10+h[2]
+            lis.clear()
+            lis=h
+            c=len(lis)
+cnt=str(cnt)
+print("The Bond beetween "+ss1+" and "+s2+" is "+cnt+"%")
+
+
+
+
+
